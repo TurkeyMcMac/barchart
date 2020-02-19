@@ -17,3 +17,8 @@ Running './histogram -w 80 data' would produce:
 
 The script should work with any POSIX shell. However, it can only automatically
 detect terminal width if the 'tput' command is present.
+
+This script integrates well into pipelines. For example, this makes a histogram
+of line counts for all source files in 'src':
+
+find -L src -type f -exec wc -l {} \; | sort -rn | histogram | less
