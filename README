@@ -1,0 +1,19 @@
+HISTOGRAM
+=========
+
+This program makes histograms. For example, take this file 'data':
+
+33 This is a label
+ 0 This is another
+100
+80 The line above had no label  
+
+Running './histogram -w 80 data' would produce:
+
+ 33 This is a label             ################
+  0 This is another             
+100                             ################################################
+ 80 The line above had no label #######################################
+
+The script should work with any POSIX shell. However, it can only automatically
+detect terminal width if the 'tput' command is present.
