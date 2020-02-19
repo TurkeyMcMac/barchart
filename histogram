@@ -1,11 +1,14 @@
 #!/bin/sh
 
+char=#
+cols=$(stty </dev/tty size 2>/dev/null | awk '{print $2}')
+[ -n "$cols" ] || cols=80
 while [ 0 -lt "$#" ]; do
 	opt="$1"
 	case "$opt" in
 	-c)	shift; char="$1" ;;
 	-w)	shift; cols="$1" ;;
-	-v)	echo 'histogram version 1.0.1'; exit 0 ;;
+	-v)	echo 'histogram version 1.0.2'; exit 0 ;;
 	-h)	cat <<EOT ; exit 0 ;;
 Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
 Makes a histogram from input files, or standard input if no files are given.
@@ -27,9 +30,6 @@ EOT
 	}
 	shift
 done
-[ -n "$char" ] || char=#
-[ -n "$cols" ] || cols=$(stty </dev/tty size 2>/dev/null | awk '{print $2}')
-[ -n "$cols" ] || cols=80
 
 exec awk -v char="$char" -v cols="$cols" '
 	{	counts[+n] = +$1;
