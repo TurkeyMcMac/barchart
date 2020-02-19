@@ -16,7 +16,8 @@ Running './histogram -w 80 data' would produce:
  80 The line above had no label #######################################
 
 The script should work with any POSIX shell. However, it can only automatically
-detect terminal width if the 'tput' command is present.
+detect terminal width if the 'size' operand to 'stty' is present and the
+controlling terminal is available as '/dev/tty'.
 
 This script integrates well into pipelines. For example, this makes a histogram
 of line counts for all source files in 'src':

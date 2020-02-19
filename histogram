@@ -10,7 +10,8 @@ while [ 0 -lt "$#" ]; do
 Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
 Makes a histogram from input files, or standard input if no files are given.
 Options:
-  -w cols  Force histogram width to the given columns.
+  -w cols  Force histogram width to the given columns. Without this, the program
+           tries to use the controlling terminal width.
   -c char  Make bars out of the given character.
   -h       Print this help.
   -v       Print version.
@@ -27,7 +28,7 @@ EOT
 	shift
 done
 [ -n "$char" ] || char=#
-[ -n "$cols" ] || cols=$(tput cols 2>/dev/null)
+[ -n "$cols" ] || cols=$(stty </dev/tty size 2>/dev/null | awk '{print $2}')
 [ -n "$cols" ] || cols=80
 
 exec awk -v char="$char" -v cols="$cols" '
