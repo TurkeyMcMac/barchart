@@ -5,7 +5,7 @@ while [ 0 -lt "$#" ]; do
 	case "$opt" in
 	-c)	shift; char="$1" ;;
 	-w)	shift; cols="$1" ;;
-	-v)	echo 'histogram version 1.0.0'; exit 0 ;;
+	-v)	echo 'histogram version 1.0.1'; exit 0 ;;
 	-h)	cat <<EOT ; exit 0 ;;
 Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
 Makes a histogram from input files, or standard input if no files are given.
