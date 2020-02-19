@@ -32,23 +32,22 @@ EOT
 done
 
 exec awk -v char="$char" -v cols="$cols" '
-	{	counts[+n] = +$1;
-		$1 = "";
-		labels[+n] = substr($0, 2);
-		++n }
-	END {	for (i = 0; i < +n; ++i) {
-			sum += counts[i];
-			if (counts[i] > max) max = counts[i];
-			len = length(""counts[i]);
-			if (len > countlen) countlen = len;
-			len = length(labels[i]);
-			if (len > labellen) labellen = len;
-		}
-		width = cols - countlen - 1 - labellen - 1;
-		for (i = 0; i < +n; ++i) {
-			printf "%"countlen"d %-"labellen"s ",
-				counts[i], labels[i];
-			if (max > width) counts[i] = counts[i] / max * width;
-			while (counts[i]-- > 0) printf "%s", char;
-			printf "\n";
-		} }' "$@"
+{	counts[+n] = +$1;
+	$1 = "";
+	labels[+n] = substr($0, 2);
+	++n }
+END {	for (i = 0; i < +n; ++i) {
+		sum += counts[i];
+		if (counts[i] > max) max = counts[i];
+		len = length(""counts[i]);
+		if (len > countlen) countlen = len;
+		len = length(labels[i]);
+		if (len > labellen) labellen = len;
+	}
+	width = cols - countlen - 1 - labellen - 1;
+	for (i = 0; i < +n; ++i) {
+		printf "%"countlen"d %-"labellen"s ", counts[i], labels[i];
+		if (max > width) counts[i] = counts[i] / max * width;
+		while (counts[i]-- > 0) printf "%s", char;
+		printf "\n";
+	} }' "$@"
