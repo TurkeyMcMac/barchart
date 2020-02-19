@@ -1,0 +1,53 @@
+#!/bin/sh
+
+while [ 0 -lt "$#" ]; do
+	opt="$1"
+	case "$opt" in
+	-c)	shift; char="$1" ;;
+	-w)	shift; cols="$1" ;;
+	-v)	echo 'histogram version 1.0.0'; exit 0 ;;
+	-h)	cat <<EOT ; exit 0 ;;
+Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
+Makes a histogram from input files, or standard input if no files are given.
+Options:
+  -w cols  Force histogram width to the given columns.
+  -c char  Make bars out of the given character.
+  -h       Print this help.
+  -v       Print version.
+Each input line is a non-negative integer followed by an optional label.
+EOT
+	--)	shift; break ;;
+	-?*)	echo >&2 "$0: Invalid option: $opt"; exit 1 ;;
+	*)	break ;;
+	esac
+	[ 0 -lt "$#" ] || {
+		echo >&2 "$0: Option $opt requires an argument"
+		exit 1
+	}
+	shift
+done
+[ -n "$char" ] || char=#
+[ -n "$cols" ] || cols=$(tput cols 2>/dev/null)
+[ -n "$cols" ] || cols=80
+
+exec awk -v char="$char" -v cols="$cols" '
+	{	counts[+n] = +$1;
+		$1 = "";
+		labels[+n] = substr($0, 2);
+		++n }
+	END {	for (i = 0; i < +n; ++i) {
+			sum += counts[i];
+			if (counts[i] > max) max = counts[i];
+			len = length(""counts[i]);
+			if (len > countlen) countlen = len;
+			len = length(labels[i]);
+			if (len > labellen) labellen = len;
+		}
+		width = cols - countlen - 1 - labellen - 1;
+		for (i = 0; i < +n; ++i) {
+			printf "%"countlen"d %-"labellen"s ",
+				counts[i], labels[i];
+			if (max > width) counts[i] = counts[i] / max * width;
+			while (counts[i]-- > 0) printf "%s", char;
+			printf "\n";
+		} }' "$@"
