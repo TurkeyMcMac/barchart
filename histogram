@@ -8,7 +8,7 @@ while [ 0 -lt "$#" ]; do
 	case "$opt" in
 	-c)	shift; char="$1" ;;
 	-w)	shift; cols="$1" ;;
-	-v)	echo 'histogram version 1.0.3'; exit 0 ;;
+	-v)	echo 'histogram version 1.0.4'; exit 0 ;;
 	-h)	cat <<EOT ; exit 0 ;;
 Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
 Makes a histogram from input files, or standard input if no files are given.
@@ -32,19 +32,19 @@ EOT
 done
 
 exec awk -v char="$char" -v cols="$cols" '
-{	counts[+n] = +$1;
+{	count = +$1;
 	$1 = "";
-	labels[+n] = substr($0, 2);
+	label = substr($0, 2);
+	sum += count;
+	if (count > max) max = count;
+	l = length(""count);
+	if (l > countlen) countlen = l;
+	l = length(label);
+	if (l > labellen) labellen = l;
+	counts[+n] = count;
+	labels[+n] = label;
 	++n }
-END {	for (i = 0; i < +n; ++i) {
-		sum += counts[i];
-		if (counts[i] > max) max = counts[i];
-		len = length(""counts[i]);
-		if (len > countlen) countlen = len;
-		len = length(labels[i]);
-		if (len > labellen) labellen = len;
-	}
-	width = cols - countlen - 1 - labellen - 1;
+END {	width = cols - countlen - 1 - labellen - 1;
 	for (i = 0; i < +n; ++i) {
 		printf "%"countlen"d %-"labellen"s ", counts[i], labels[i];
 		if (max > width) counts[i] = counts[i] / max * width;
