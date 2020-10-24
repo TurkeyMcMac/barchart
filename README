@@ -1,14 +1,14 @@
-HISTOGRAM
-=========
+BARCHART
+========
 
-This program makes histograms. For example, take this file 'data':
+This program makes bar charts. For example, take this file 'data':
 
 33 This is a label
  0 This is another
 100
 80 The line above had no label  
 
-Running './histogram -w 80 data' would produce:
+Running './barchart -w 80 data' would produce:
 
  33 This is a label             ################
   0 This is another             
@@ -19,7 +19,7 @@ The script should work with any POSIX shell. However, it can only automatically
 detect terminal width if the 'size' operand to 'stty' is present and the
 controlling terminal is available as '/dev/tty'.
 
-This script integrates well into pipelines. For example, this makes a histogram
+This script integrates well into pipelines. For example, this makes a bar chart
 of line counts for all source files in 'src':
 
-find -L src -type f -exec wc -l {} \; | sort -rn | histogram | less
+find -L src -type f -exec wc -l {} \; | sort -rn | barchart | less

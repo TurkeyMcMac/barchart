@@ -10,12 +10,12 @@ while [ 0 -lt "$#" ]; do
 	-c*)	char="${1##-c}" ;;
 	-w)	shift; cols="$1" ;;
 	-w*)	cols="${1##-w}" ;;
-	-v)	echo 'histogram version 1.0.5'; exit 0 ;;
+	-v)	echo 'barchart version 1.0.5'; exit 0 ;;
 	-h)	cat <<EOT ; exit 0 ;;
-Usage: histogram [-w cols] [-c char] [-h] [-v] [--] file...
-Makes a histogram from input files, or standard input if no files are given.
+Usage: barchart [-w cols] [-c char] [-h] [-v] [--] file...
+Makes a bar chart from input files, or standard input if no files are given.
 Options:
-  -w cols  Force histogram width to the given columns. Without this, the program
+  -w cols  Force bar chart width to the given columns. Without this, the program
            tries to use the controlling terminal width.
   -c char  Make bars out of the given character.
   -h       Print this help.
